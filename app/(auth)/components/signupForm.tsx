@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState, useEffect } from "react";
-
+import { useRouter } from "next/navigation";
 export default function SignUpForm() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -20,7 +20,7 @@ export default function SignUpForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
-
+  const router = useRouter();
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (password !== repeatPassword) {
@@ -49,6 +49,7 @@ export default function SignUpForm() {
     console.log(data);
     if (response.ok) {
       alert("Account created successfully!");
+      router.push("/signin");
     } else {
       const errorData = await response.json();
       alert(`Error: ${errorData.message}`);
