@@ -33,7 +33,7 @@ export function SignInForm() {
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: "include", // IMPORTANT
+          credentials: "include", // IMPORTANT - This sends/receives cookies
           body: JSON.stringify({
             email,
             password,
@@ -41,20 +41,32 @@ export function SignInForm() {
         },
       );
 
-      const data = await response.json();
+      console.log("Response status:", response.status);
+      console.log("Response headers:", response.headers);
+      console.log("Response cookies:", response.headers.getSetCookie?.());
 
-      if (response.ok) {
+      const data = await response.json();
+      console.log("Response data:", data);
+
+      // Check if response is successful (status 200-299)
+      if (response.status >= 200 && response.status < 300) {
+        console.log("Sign-in successful, cookies saved automatically");
         alert("Sign-in successful! Redirecting to profile...");
         setTimeout(() => {
           router.push("/profile");
         }, 200);
+      } else if (response.status === 401) {
+        console.error("Unauthorized: Invalid credentials");
+        alert("Invalid email or password");
+      } else if (response.status === 400) {
+        console.error(`Error: ${data.message}`);
+        alert(`Sign-in failed: ${data.message}`);
       } else {
         console.error(`Error: ${data.message}`);
         alert(`Sign-in failed: ${data.message}`);
       }
     } catch (err) {
-      console.error(err);
-      console.error("Network error during sign-in");
+      console.error("Network error:", err);
       alert("Network error during sign-in");
     }
   }

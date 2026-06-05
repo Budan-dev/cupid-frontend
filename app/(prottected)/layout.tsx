@@ -23,16 +23,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         );
 
         if (!res.ok) {
+          console.log("Auth check failed, redirecting to signin");
           router.push("/signin");
           return;
-        } else if (res.ok) {
-          setTimeout(() => {
-            router.push("/profile");
-          }, 200);
         }
 
+        // Auth is valid, allow access
         setLoading(false);
       } catch (err) {
+        console.error("Auth check error:", err);
         router.push("/signin");
       }
     }
