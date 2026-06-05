@@ -14,21 +14,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     async function checkAuth() {
       try {
-        const res = await fetch(`/api/auth/profile`, {
-          method: "GET",
-          credentials: "include",
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/user/profile`,
+          {
+            method: "GET",
+            credentials: "include",
+          },
+        );
 
         if (!res.ok) {
-          console.log("Auth check failed, redirecting to signin");
           router.push("/signin");
           return;
         }
 
-        // Auth is valid, allow access
         setLoading(false);
       } catch (err) {
-        console.error("Auth check error:", err);
         router.push("/signin");
       }
     }

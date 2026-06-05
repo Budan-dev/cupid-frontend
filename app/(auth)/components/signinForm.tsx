@@ -20,50 +20,38 @@ export function SignInForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     try {
-      const response = await fetch(`/api/auth/signin`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/user/signin`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include", // IMPORTANT
+          body: JSON.stringify({
+            email,
+            password,
+          }),
         },
-        credentials: "include", // IMPORTANT - This sends/receives cookies
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-
-      console.log("Response status:", response.status);
-      console.log("Response headers:", response.headers);
-      console.log("Response cookies:", response.headers.getSetCookie?.());
+      );
 
       const data = await response.json();
-      console.log("Response data:", data);
 
-      // Check if response is successful (status 200-299)
-      if (response.status >= 200 && response.status < 300) {
-        console.log("Sign-in successful, cookies saved automatically");
-        alert("Sign-in successful! Redirecting to profile...");
-        setTimeout(() => {
-          router.push("/profile");
-        }, 200);
-      } else if (response.status === 401) {
-        console.error("Unauthorized: Invalid credentials");
-        alert("Invalid email or password");
-      } else if (response.status === 400) {
-        console.error(`Error: ${data.message}`);
-        alert(`Sign-in failed: ${data.message}`);
+      if (response.ok) {
+        router.push("/profile");
       } else {
-        console.error(`Error: ${data.message}`);
-        alert(`Sign-in failed: ${data.message}`);
+        setError(data.message);
       }
     } catch (err) {
-      console.error("Network error:", err);
+      console.error(err);
+      console.error("Network error during sign-in");
       alert("Network error during sign-in");
     }
   }
