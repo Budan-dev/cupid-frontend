@@ -24,7 +24,7 @@ export default function SignUpForm() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (password !== repeatPassword) {
-      alert("Passwords do not match");
+      console.error("Passwords do not match");
       return;
     }
     const formData = {
@@ -48,11 +48,11 @@ export default function SignUpForm() {
     const data = await response.json();
     console.log(data);
     if (response.ok) {
-      alert("Account created successfully!");
+      console.log("Account created successfully!");
       router.push("/signin");
     } else {
       const errorData = await response.json();
-      alert(`Error: ${errorData.message}`);
+      console.error(`Error: ${errorData.message}`);
     }
   }
 
