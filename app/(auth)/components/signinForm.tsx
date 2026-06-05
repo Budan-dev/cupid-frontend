@@ -26,20 +26,17 @@ export function SignInForm() {
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/user/signin`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include", // IMPORTANT - This sends/receives cookies
-          body: JSON.stringify({
-            email,
-            password,
-          }),
+      const response = await fetch(`/api/auth/signin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        credentials: "include", // IMPORTANT - This sends/receives cookies
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
 
       console.log("Response status:", response.status);
       console.log("Response headers:", response.headers);
