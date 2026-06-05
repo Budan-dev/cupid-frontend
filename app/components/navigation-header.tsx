@@ -28,7 +28,7 @@ export function NavigationHeader() {
 
   async function handleSignOut() {
     try {
-      const response = await fetch("/auth/signout", {
+      const response = await fetch("/api/user/signout", {
         method: "POST",
         credentials: "include",
       });
