@@ -43,18 +43,18 @@ export function SignInForm() {
 
       const data = await response.json();
 
-      if (!response.ok) {
-        alert(data?.message || "Sign-in failed");
-        return;
-      }
-
       if (response.ok) {
+        alert("Sign-in successful! Redirecting to profile...");
         setTimeout(() => {
           router.push("/profile");
         }, 200);
+      } else {
+        console.error(`Error: ${data.message}`);
+        alert(`Sign-in failed: ${data.message}`);
       }
     } catch (err) {
       console.error(err);
+      console.error("Network error during sign-in");
       alert("Network error during sign-in");
     }
   }
