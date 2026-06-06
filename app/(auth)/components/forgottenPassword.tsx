@@ -4,28 +4,21 @@ import { useState } from "react";
 export default function ForgottenPasswordPage() {
   const [email, setEmail] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle forgotten password logic here
     try {
-      // Simulate sending reset link
-      fetch("/api/user/forgottenpassword", {
+      const response = await fetch("/api/user/forgottenpassword", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
-      })
-        .then((response) => {
-          if (response.ok) {
-            alert("Reset link sent to your email!");
-          } else {
-            alert("Failed to send reset link. Please try again.");
-          }
-        })
-        .catch(() => {
-          alert("An error occurred. Please try again.");
-        });
+      });
+
+      if (response.ok) {
+        alert("Reset link sent to your email!");
+      } else {
+        const data = await response.json();
+        alert(data.message || "Failed to send reset link.");
+      }
     } catch (error) {
       console.error("Error sending reset link:", error);
       alert("An error occurred. Please try again.");
