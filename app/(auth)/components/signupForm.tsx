@@ -20,11 +20,13 @@ export default function SignUpForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const router = useRouter();
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (password !== repeatPassword) {
-      console.error("Passwords do not match");
+      setError("Passwords do not match!");
       return;
     }
     const formData = {
@@ -46,10 +48,11 @@ export default function SignUpForm() {
     console.log(data);
     if (response.ok) {
       console.log("Account created successfully!");
+      setSuccess("Account created successfully!");
       router.push("/signin");
     } else {
       const errorData = await response.json();
-      console.error(`Error: ${errorData.message}`);
+      setError(`Error: ${errorData.message}`);
     }
   }
 
@@ -60,6 +63,8 @@ export default function SignUpForm() {
         <CardDescription>
           Enter your details below to create a new account
         </CardDescription>
+        {error && <p className="text-red-500 mt-2">{error}</p>}
+        {success && <p className="text-green-500 mt-2">{success}</p>}
       </CardHeader>
       <CardContent>
         <form

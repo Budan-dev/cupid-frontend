@@ -26,7 +26,7 @@ export default function ResetPassword() {
     setError("");
     setSuccess("");
 
-    // ✅ Check passwords match first
+    //  Check passwords match first
     if (newPassword !== confirmPassword) {
       setError("Passwords do not match!");
       return;
@@ -41,14 +41,14 @@ export default function ResetPassword() {
       const response = await fetch("/api/user/resetpassword", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token, newPassword }), // ✅ send token + newPassword
+        body: JSON.stringify({ token, newPassword }), // send token + newPassword
       });
 
       const data = await response.json();
 
       if (response.ok) {
         setSuccess("Password reset successful! Redirecting to sign in...");
-        setTimeout(() => router.push("/signin"), 2000); // ✅ redirect after success
+        setTimeout(() => router.push("/signin"), 2000); //  redirect after success
       } else {
         setError(data.message || "Failed to reset password.");
       }

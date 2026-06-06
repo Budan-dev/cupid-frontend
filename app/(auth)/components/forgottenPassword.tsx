@@ -1,8 +1,12 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function ForgottenPasswordPage() {
   const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -14,14 +18,20 @@ export default function ForgottenPasswordPage() {
       });
 
       if (response.ok) {
-        alert("Reset link sent to your email!");
+        setSuccess("Reset link sent to your email!");
+        setEmail("");
+        setTimeout(() => {
+          setSuccess("");
+          router.push("/signin");
+        }, 5000); // Clear success message after 5 seconds
       } else {
         const data = await response.json();
-        alert(data.message || "Failed to send reset link.");
+        setError(data.message || "Failed to send reset link.");
       }
     } catch (error) {
       console.error("Error sending reset link:", error);
-      alert("An error occurred. Please try again.");
+      setError("An error occurred. Please try again.");
+      setEmail("");
     }
   };
 
@@ -31,6 +41,8 @@ export default function ForgottenPasswordPage() {
       <p className="mb-4">
         Enter your email to receive password reset instructions.
       </p>
+      {error && <p className="text-red-500 mb-4">{error}</p>}
+      {success && <p className="text-green-500 mb-4">{success}</p>}
       <form className="max-w-md" onSubmit={handleSubmit}>
         <input
           type="email"

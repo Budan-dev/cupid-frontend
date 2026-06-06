@@ -21,6 +21,7 @@ export function SignInForm() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -42,6 +43,7 @@ export function SignInForm() {
       const data = await response.json();
 
       if (response.ok) {
+        setSuccess("Signed in successfully!");
         router.push("/profile");
       } else {
         setError(data.message);
@@ -60,6 +62,8 @@ export function SignInForm() {
         <CardDescription>
           Enter your email below to log in to your account
         </CardDescription>
+        {error && <p className="text-red-500 mt-2">{error}</p>}
+        {success && <p className="text-green-500 mt-2">{success}</p>}
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
