@@ -44,7 +44,10 @@ export function SignInForm() {
 
       if (response.ok) {
         setSuccess("Signed in successfully!");
-        router.push("/profile");
+        setTimeout(() => {
+          setSuccess("");
+          router.push("/profile");
+        }, 6000);
       } else {
         setError(data.message);
       }

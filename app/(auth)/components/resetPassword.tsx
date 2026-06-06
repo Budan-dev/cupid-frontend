@@ -5,21 +5,16 @@ import { useRouter } from "next/navigation";
 export default function ResetPassword() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [token, setToken] = useState("");
+  // const [token, setToken] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const router = useRouter();
 
-  // ✅ Read token from URL e.g. /reset-password?token=xxxx
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const t = params.get("token");
-    if (!t) {
-      setError("Invalid or missing reset token.");
-    } else {
-      setToken(t);
-    }
-  }, []);
+  //  Read token from URL e.g. /reset-password?token=xxxx
+  const token =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("token")
+      : null;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
